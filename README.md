@@ -1,43 +1,94 @@
 
-# Analog Power Amplifier Design and Simulation
+# Analog Power Amplifier Design
+### Multi-Stage BJT Amplifier with Global Negative Feedback
 
-A complete analog power amplifier designed and simulated in **LTspice** as an Electronics II course project.
+## Overview
 
-The amplifier combines a differential input stage, current-mirror biasing, voltage amplification stages, a complementary push-pull power stage, and global negative feedback. The design was evaluated for gain, distortion, efficiency, power consumption, PSRR, input/output resistance, and real-audio amplification.
+This project presents the design and simulation of a multi-stage analog power amplifier developed for an Electronics II course project.
 
-## Project Highlights
+The main objective was to design a complete amplifier capable of driving a **50 Ω load** while satisfying constraints on gain, output swing, efficiency, harmonic distortion, power consumption, input/output resistance, and power-supply rejection.
 
-- Designed a complete multi-stage analog amplifier from transistor-level building blocks
-- Implemented a complementary push-pull output stage for driving a 50 Ω load
-- Designed a global negative-feedback network for stable closed-loop gain
-- Performed DC, AC, transient, THD, PSRR, and impedance analyses in LTspice
-- Evaluated power consumption and output-stage efficiency
-- Tested the final amplifier using a real audio signal
-- Used Python for audio preprocessing and normalization
-
-## Circuit Architecture
-
-The final amplifier consists of:
+The final design was implemented and evaluated in **LTspice** and includes:
 
 - Differential input stage
-- Current-mirror bias networks
+- Current-mirror biasing
 - Voltage amplification stages
 - Complementary push-pull output stage
 - Global negative feedback
 - 50 Ω output load
 
-The output-stage biasing was implemented using a separate current mirror, while diode-connected transistors were used to reduce crossover distortion.
+The design was evaluated through DC, AC, transient, distortion, power, impedance, and real-audio simulations.
+
+---
+
+## Project Structure
+
+```text
+Analog-Power-Amplifier/
+│
+├── circuit/
+│   ├── README.md
+│   └── LTspice schematic files
+│
+├── audio/
+│   ├── README.md
+│   ├── audio.wav
+│   └── output.wav
+│
+├── report/
+│   ├── README.md
+│   └── Electronics_II_Project_Report.pdf
+│
+└── README.md
+```
+
+---
+
+## Circuit Architecture
+
+The amplifier is composed of several transistor-level stages.
+
+### Differential Input Stage
+
+A BJT differential pair is used as the input stage, providing differential amplification and enabling the application of global negative feedback.
+
+### Biasing
+
+Current mirrors are used to establish stable bias currents across the amplifier stages.
+
+A separate current-mirror network is used for the output stage to provide the required bias current independently from the earlier stages.
+
+### Voltage Amplification
+
+Intermediate transistor stages provide the required open-loop voltage gain before the signal reaches the output power stage.
+
+### Output Stage
+
+The output stage uses a complementary **push-pull topology** with NPN and PNP transistors.
+
+This topology was selected to provide:
+
+- High output-current capability
+- Improved efficiency
+- Symmetric output swing
+- Suitable operation with a low-resistance 50 Ω load
+
+Diode-connected transistors are used to reduce crossover distortion.
+
+---
 
 ## Global Negative Feedback
 
-The final output voltage is sampled and fed back to the inverting input of the differential stage.
+Global negative feedback is applied from the final output node to the inverting input of the differential stage.
 
 The feedback network uses:
 
-- `Rf = 190 kΩ`
-- `Rg = 10 kΩ`
+```text
+Rf = 190 kΩ
+Rg = 10 kΩ
+```
 
-giving an ideal closed-loop gain of approximately:
+The ideal closed-loop gain is therefore:
 
 ```text
 Av ≈ 1 + Rf/Rg ≈ 20
@@ -49,101 +100,186 @@ The simulated closed-loop gain at 1 kHz was:
 Av = 19.88
 ```
 
-## Performance
+Negative feedback significantly improved linearity, reduced distortion, and prevented early clipping compared with the open-loop configuration.
+
+---
+
+## DC Operating Point
+
+The final circuit was analyzed using LTspice operating-point simulations.
+
+Important bias results include:
+
+- Output DC voltage close to 0 V
+- Output-stage bias current ≈ 2.1 mA
+- Stable biasing across the amplifier stages
+
+The biasing network was designed to provide sufficient current for the required output swing without excessive power consumption.
+
+---
+
+## Output Swing and Efficiency
+
+The amplifier was designed to generate a large sinusoidal output swing across a 50 Ω load.
+
+The final design achieved:
+
+```text
+Maximum demonstrated output swing ≈ 17.4 Vpp
+```
+
+The output stage efficiency was approximately:
+
+```text
+η ≈ 72%
+```
+
+This satisfies the project requirement of more than 60% efficiency.
+
+---
+
+## Harmonic Distortion
+
+Total Harmonic Distortion (THD) was evaluated using a 1 kHz sinusoidal input.
+
+### Normal Operation
+
+```text
+THD ≈ 0.0287%
+```
+
+### With Bias-Source Noise
+
+Noise sources were introduced in series with the resistors controlling the current-mirror bias currents.
+
+The resulting distortion was:
+
+```text
+THD ≈ 0.0416%
+```
+
+The increase in distortion remains small, showing that the amplifier maintains good linearity under bias perturbations.
+
+---
+
+## Power-Supply Rejection
+
+Power-supply rejection was evaluated by applying a sawtooth ripple to the positive and negative supply rails.
+
+The measured result was approximately:
+
+```text
+PSRR ≈ 120.45 dB
+```
+
+This indicates strong rejection of supply-voltage variations at the output.
+
+---
+
+## Input and Output Resistance
+
+The differential input resistance was measured using a small-signal AC test source:
+
+```text
+Rin,diff ≈ 16.7 MΩ
+```
+
+The output resistance was measured after removing the 50 Ω load and applying a test source at the output:
+
+```text
+Rout ≈ 0.473 Ω
+```
+
+The low output resistance allows the amplifier to drive low-impedance loads effectively.
+
+---
+
+## Power Consumption
+
+For a 1 kHz sinusoidal input with amplitude 50 mV, the total circuit power consumption was:
+
+```text
+Ptotal ≈ 140.6 mW
+```
+
+This satisfies the project requirement of:
+
+```text
+Ptotal ≤ 190 mW
+```
+
+---
+
+## Real Audio Test
+
+The amplifier was also evaluated using a real recorded audio signal rather than only sinusoidal test signals.
+
+The original recording was converted to WAV format and processed using Python before being applied to the LTspice circuit.
+
+Audio preprocessing included:
+
+- Mono audio
+- 48 kHz sample rate
+- Amplitude normalization
+
+The amplified waveform preserved the input signal shape without severe clipping.
+
+The corresponding files are available in:
+
+```text
+audio/
+├── audio.wav
+└── output.wav
+```
+
+---
+
+## Final Results
 
 | Parameter | Result |
 |---|---:|
 | Closed-loop gain @ 1 kHz | 19.88 |
-| Maximum demonstrated output swing | 17.4 Vpp |
+| Maximum output swing | 17.4 Vpp |
 | Output-stage efficiency | 72% |
-| Total power consumption @ 50 mV, 1 kHz | 140.6 mW |
+| Total power consumption | 140.6 mW |
 | THD | 0.0287% |
-| THD with bias-source noise | 0.0416% |
+| THD with bias noise | 0.0416% |
 | PSRR | 120.45 dB |
 | Differential input resistance | 16.7 MΩ |
 | Output resistance | 0.473 Ω |
 | Output load | 50 Ω |
 | Circuit cost | 145 |
 
-## Simulation and Verification
+---
 
-The final design was evaluated using several analyses in LTspice:
-
-- DC operating-point analysis
-- AC frequency analysis
-- Closed-loop gain measurement
-- Transient analysis
-- Output swing and clipping analysis
-- Power consumption measurement
-- Output-stage efficiency measurement
-- Total harmonic distortion (THD)
-- THD under noisy bias conditions
-- Power-supply rejection ratio (PSRR)
-- Differential input resistance measurement
-- Output resistance measurement
-
-## Real Audio Test
-
-In addition to sinusoidal test signals, the amplifier was evaluated using a real recorded audio waveform.
-
-The audio signal was converted to WAV format and processed using Python before being applied to the LTspice model.
-
-Audio preprocessing included:
-
-- Mono conversion
-- 48 kHz sampling rate
-- Amplitude normalization
-
-The resulting output waveform was amplified without severe clipping.
-
-## Repository Structure
-
-```text
-.
-├── README.md
-│
-├── circuit/
-│   ├── README.md
-│   └── LTspice schematic files
-│
-├── audio/
-│   ├── README.md
-│   ├── audio.wav
-│   └── output.wav
-│
-└── report/
-    ├── README.md
-    └── Electronics_II_Project_Report.pdf
-```
-
-## Tools and Skills
-
-**Tools**
+## Tools
 
 - LTspice
 - Python
+- WAV audio processing
 
-**Topics**
+---
 
-- Analog circuit design
-- BJT amplifier design
-- Differential amplifiers
-- Current mirrors
-- Push-pull power amplifiers
-- Negative feedback
-- Biasing
-- Harmonic distortion analysis
-- Power and efficiency analysis
-- PSRR
-- Small-signal impedance analysis
-- Audio signal processing
+## Key Takeaway
 
-## Documentation
+The project demonstrates how transistor-level analog design, biasing, complementary output stages, and global negative feedback can be combined to build a power-efficient and low-distortion amplifier capable of driving a low-resistance load.
 
-The complete design process, theoretical calculations, simulation methodology, and detailed results are available in the [`report/`](report/) directory.
+A major design challenge was achieving a large output swing while maintaining low power consumption, low distortion, and stable biasing.
 
-The LTspice circuit files are available in [`circuit/`](circuit/), and the real-audio test files are available in [`audio/`](audio/).
+---
+
+## Report
+
+A complete description of the theoretical calculations, design decisions, LTspice simulations, and performance evaluation is available in:
+
+```text
+report/Electronics_II_Project_Report.pdf
+```
+
+---
 
 ## Author
 
-**Helia Tajabadi**
+**Helia Tajabadi**  
+Electrical Engineering  
+Sharif University of Technology
