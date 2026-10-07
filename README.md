@@ -21,29 +21,6 @@ The design was evaluated through DC, AC, transient, distortion, power, impedance
 
 ---
 
-## Project Structure
-
-```text
-Analog-Power-Amplifier/
-│
-├── circuit/
-│   ├── README.md
-│   └── LTspice schematic files
-│
-├── audio/
-│   ├── README.md
-│   ├── audio.wav
-│   └── output.wav
-│
-├── report/
-│   ├── README.md
-│   └── Electronics_II_Project_Report.pdf
-│
-└── README.md
-```
-
----
-
 ## Circuit Architecture
 
 The amplifier is composed of several transistor-level stages.
@@ -226,11 +203,6 @@ The amplified waveform preserved the input signal shape without severe clipping.
 
 The corresponding files are available in:
 
-```text
-audio/
-├── audio.wav
-└── output.wav
-```
 
 ---
 
@@ -250,13 +222,6 @@ audio/
 | Output load | 50 Ω |
 | Circuit cost | 145 |
 
----
-
-## Tools
-
-- LTspice
-- Python
-- WAV audio processing
 
 ---
 
@@ -272,9 +237,6 @@ A major design challenge was achieving a large output swing while maintaining lo
 
 A complete description of the theoretical calculations, design decisions, LTspice simulations, and performance evaluation is available in:
 
-```text
-report/Electronics_II_Project_Report.pdf
-```
 
 ---
 
