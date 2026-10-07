@@ -233,12 +233,6 @@ A major design challenge was achieving a large output swing while maintaining lo
 
 ---
 
-## Report
-
-A complete description of the theoretical calculations, design decisions, LTspice simulations, and performance evaluation is available in:
-
-
----
 
 ## Author
 
